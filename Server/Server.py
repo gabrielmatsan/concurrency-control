@@ -1,6 +1,5 @@
 import Pyro5.api
 import threading
-import queue
 
 
 @Pyro5.api.expose
@@ -8,10 +7,11 @@ class Coordinator:
     def __init__(self):
         self.lock = threading.Lock()
 
-    def request_acess(self):
+    def request_access(self):
         self.lock.acquire()
+        return True
 
-    def release_acess(self):
+    def release_access(self):
         self.lock.release()
 
 def main():
@@ -24,5 +24,7 @@ def main():
 
     daemon.requestLoop()
 
+if __name__ == "__main__":
+    main()
 
 
