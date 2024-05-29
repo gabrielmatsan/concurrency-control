@@ -20,7 +20,7 @@ def main():
     uri = daemon.register(Coordinator)
     ns.register("coordenador_one", uri)
 
-    print("Coordenador pronto")
+    print("Coordenador-pronto")
 
     daemon.requestLoop()
 
