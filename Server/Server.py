@@ -18,7 +18,11 @@ def main():
     daemon = Pyro5.api.Daemon()
     ns = Pyro5.api.locate_ns()
     uri = daemon.register(Coordinator)
-    ns.register()
+    ns.register("coordenador_one", uri)
+
+    print("Coordenador pronto")
+
+    daemon.requestLoop()
 
 
 
