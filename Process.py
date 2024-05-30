@@ -85,22 +85,25 @@ class Process:
     def iniciar_eleicao(self, processos: List['Process']):
         print(f"Processo {self.id} iniciou uma eleição.")
         candidatos = [p for p in processos if p.id > self.id]
-        if not candidatos:
+
+        # Flag to check if higher ID processes respond
+        higher_process_responded = False
+
+        for candidato in candidatos:
+            try:
+                resposta = candidato.responder_eleicao(self.id)
+                if resposta == "OK":
+                    higher_process_responded = True
+            except:
+                continue
+
+        # If no higher process responded, this process becomes the coordinator
+        if not higher_process_responded:
             self.isCoord = True
             print(f"Processo {self.id} é o novo coordenador.")
             for p in processos:
                 if p.id != self.id:
                     p.notificar_novo_coordenador(self.id)
-        else:
-            for candidato in candidatos:
-                try:
-                    resposta = candidato.responder_eleicao(self.id)
-                    if resposta == "OK":
-                        print(f"Processo {self.id} recebeu resposta de processo {candidato.id}.")
-                        candidato.iniciar_eleicao(processos)
-                        return
-                except:
-                    continue
 
     def responder_eleicao(self, id_processo):
         print(f"Processo {self.id} recebeu uma mensagem de eleição do processo {id_processo}.")
@@ -139,8 +142,6 @@ if __name__ == "__main__":
 
     # Simulate clients trying to access resources and detect coordinator failure
     time.sleep(1)
-    processos[1].acessar_recurso()
-    processos[2].acessar_recurso()
 
 
 
