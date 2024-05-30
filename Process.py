@@ -2,12 +2,13 @@ import Pyro5.api
 
 @Pyro5.api.expose
 class Process:
-    def __init__(self, id, uri="PYRO:gerenciador.concorrencia@localhost:9090"):
+    def __init__(self, id, uri="PYRO:gerenciador.concorrencia@localhost:9090", isCoord=False):
         self.id = id # Define o ID único do processo
         self.uri = uri   # URI do objeto remoto no servidor
         self.gerenciador = Pyro5.api.Proxy(self.uri)  # Cria um proxy para o objeto remoto
         self.recurso = None  # Inicializa o recurso como None, indicando que não está alocado
         self.fila_espera = []  # Lista para gerenciar a fila de espera
+        self.isCoord = isCoord
 
     def acessar_recurso(self):
         resposta = self.gerenciador.coordenador_acessar_recurso(self.id)  # Chama o método remoto acessar_recurso

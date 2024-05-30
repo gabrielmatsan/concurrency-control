@@ -1,9 +1,9 @@
-from process import Process
+import Process
 
 if __name__ == "__main__":
-    process1 = Process(1)  # Cria um cliente com ID "cliente1"
-    process2 = Process(2)  # Cria um cliente com ID "cliente2"
-    process3 = Process(3)
+    process1 = Process.Process(1)  # Cria um cliente com ID "cliente1"
+    process2 = Process.Process(2)  # Cria um cliente com ID "cliente2"
+    process3 = Process.Process(3)
     
     process1.acessar_recurso()  # Cliente tenta acessar o recurso
     process2.acessar_recurso()  # Cliente tenta acessar o recurso

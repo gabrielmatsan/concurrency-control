@@ -1,9 +1,9 @@
 import Pyro5.api
-from process import Process as p
+import Process
 
 @Pyro5.api.expose
 def iniciar_servidor():
-    gerenciador = p()  # Cria uma instância do objeto GerenciamentoConcorrencia
+    gerenciador = Process.Process(id=1)  # Cria uma instância do objeto GerenciamentoConcorrencia
     daemon = Pyro5.api.Daemon(host="localhost", port=9090)  # Cria um daemon Pyro que escuta na porta 9090 no localhost
     uri = daemon.register(gerenciador, "gerenciador.concorrencia")  # Registra o objeto no daemon com um nome específico
     print(f"Servidor disponível. URI: {uri}")  # Imprime a URI do objeto para facilitar o acesso pelo cliente
