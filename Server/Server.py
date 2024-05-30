@@ -35,9 +35,10 @@ class GerenciamentoConcorrencia:
 
     def listar_fila_espera(self):
         if self.fila_espera:
-            return f"Clientes na fila de espera: {', '.join(self.fila_espera)}"
+            return f"Clientes na fila de espera: {', '.join(map(str, self.fila_espera))}"
         else:
             return "Não há clientes na fila de espera"
+
 
 def iniciar_servidor():
     gerenciador = GerenciamentoConcorrencia()  # Cria uma instância do objeto GerenciamentoConcorrencia
