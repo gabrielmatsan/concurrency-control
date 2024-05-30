@@ -25,9 +25,11 @@ class Cliente:
 if __name__ == "__main__":
     cliente1 = Cliente(1)  # Cria um cliente com ID "cliente1"
     cliente2 = Cliente(2)  # Cria um cliente com ID "cliente2"
+    cliente3 = Cliente(3)
     
     cliente1.acessar_recurso()  # Cliente tenta acessar o recurso
     cliente2.acessar_recurso()  # Cliente tenta acessar o recurso
+    cliente3.acessar_recurso()
     cliente1.estado_recurso()  # Cliente verifica o estado do recurso
     cliente1.listar_fila_espera()  # Cliente lista os clientes na fila de espera
     cliente1.liberar_recurso()  # Cliente tenta liberar o recurso    
