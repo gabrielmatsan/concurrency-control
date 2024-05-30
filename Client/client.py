@@ -1,27 +1,36 @@
-# saved as client.py
 import Pyro5.api
 
-# Criação do proxy para o servidor Kerberos
-kerberos = Pyro5.api.Proxy("PYRONAME:example.kerb")    # use name server object lookup uri shortcut
+class Cliente:
+    def __init__(self, id_cliente):
+        self.id_cliente = id_cliente  # Define o ID único do cliente
+        self.uri = "PYRO:gerenciador.concorrencia@localhost:9090"  # URI do objeto remoto no servidor
+        self.gerenciador = Pyro5.api.Proxy(self.uri)  # Cria um proxy para o objeto remoto
 
-# Solicitação de nome do usuário
-name = input("What is your name? ").strip()
-print(kerberos.get_fortune(name))
+    def acessar_recurso(self):
+        resposta = self.gerenciador.acessar_recurso(self.id_cliente)  # Chama o método remoto acessar_recurso
+        print(resposta)  # Imprime a resposta recebida do servidor
 
-# Solicitação de entrada para a e b e cálculo da soma
-a, b = input("Enter 'a', 'b' to get its sum ").split(' ')
-print(kerberos.sum(a, b))
+    def liberar_recurso(self):
+        resposta = self.gerenciador.liberar_recurso(self.id_cliente)  # Chama o método remoto liberar_recurso
+        print(resposta)  # Imprime a resposta recebida do servidor
 
-# Listagem de arquivos no servidor
-print("Files under Server\n")
-print(kerberos.listdir())
+    def estado_recurso(self):
+        resposta = self.gerenciador.estado_recurso()  # Chama o método remoto estado_recurso
+        print(resposta)  # Imprime a resposta recebida do servidor
 
-# Solicitação do nome do arquivo para transferência
-fname = input("Enter filename to transfer ").strip()
-x = kerberos.sendfile(fname)
-if x:
-    with open('./Client/' + str(fname), 'w') as f:
-        f.write(kerberos.sendfile(fname))
-    print(f"File {fname} transferred successfully.")
-else:
-    print("File not found")
+    def listar_fila_espera(self):
+        resposta = self.gerenciador.listar_fila_espera()  # Chama o método remoto listar_fila_espera
+        print(resposta)  # Imprime a resposta recebida do servidor
+
+if __name__ == "__main__":
+    cliente1 = Cliente(1)  # Cria um cliente com ID "cliente1"
+    cliente2 = Cliente(2)  # Cria um cliente com ID "cliente2"
+    
+    cliente1.acessar_recurso()  # Cliente tenta acessar o recurso
+    cliente2.acessar_recurso()  # Cliente tenta acessar o recurso
+    cliente1.estado_recurso()  # Cliente verifica o estado do recurso
+    cliente1.listar_fila_espera()  # Cliente lista os clientes na fila de espera
+    cliente1.liberar_recurso()  # Cliente tenta liberar o recurso    
+    cliente2.estado_recurso()  # Cliente verifica o estado do recurso
+    cliente2.listar_fila_espera()  # Cliente lista os clientes na fila de espera
+    cliente2.liberar_recurso()  # Cliente tenta liberar o recurso
