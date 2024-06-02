@@ -1,17 +1,41 @@
-import Process
+import Pyro5.api
+import time
+
+def get_process_proxy():
+    uri = "PYRO:gerenciador.concorrencia@localhost:9090"
+    return Pyro5.api.Proxy(uri)
+
+def simulate_client_processes():
+    process_proxy = get_process_proxy()
+
+    try:
+        process_proxy.acessar_recurso(2)  # Client with ID 2 tries to access the resource
+    except Exception as e:
+        print(f"Client 2 failed to access resource: {e}")
+
+    try:
+        process_proxy.acessar_recurso(3)  # Client with ID 3 tries to access the resource
+    except Exception as e:
+        print(f"Client 3 failed to access resource: {e}")
+
+    time.sleep(1)  # Simulate some delay before the next operation
+
+    try:
+        process_proxy.liberar_recurso(2)  # Client with ID 2 releases the resource
+    except Exception as e:
+        print(f"Client 2 failed to release resource: {e}")
+
+    try:
+        process_proxy.acessar_recurso(4)  # Client with ID 4 tries to access the resource
+    except Exception as e:
+        print(f"Client 3 failed to access resource: {e}")
+
+    try:
+        process_proxy.liberar_recurso(4)  # Client with ID 3 tries to access the resource
+    except Exception as e:
+        print(f"Client 3 failed to access resource: {e}")
+
 
 if __name__ == "__main__":
-    process1 = Process.Process(1)  # Cria um cliente com ID "cliente1"
-    process2 = Process.Process(2)  # Cria um cliente com ID "cliente2"
-    process3 = Process.Process(3)  # Cria um cliente com ID "cliente3"
-    
-    process1.acessar_recurso()  # Cliente tenta acessar o recurso
-    process2.acessar_recurso()  # Cliente tenta acessar o recurso
-    process3.acessar_recurso()
-    process1.estado_recurso()  # Cliente verifica o estado do recurso
-    process1.listar_fila_espera()  # Cliente lista os clientes na fila de espera
-    process1.liberar_recurso()  # Cliente tenta liberar o recurso    
-    process2.estado_recurso()  # Cliente verifica o estado do recurso
-    process2.listar_fila_espera()  # Cliente lista os clientes na fila de espera
-    process2.liberar_recurso()  # Cliente tenta liberar o recurso
-
+    time.sleep(2)  # Ensure the server is started before the client tries to connect
+    simulate_client_processes()
